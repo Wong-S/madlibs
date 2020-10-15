@@ -9,27 +9,38 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 AWESOMENESS = [
-    'awesome', 'terrific', 'fantastic', 'neato', 'fantabulous', 'wowza',
-    'oh-so-not-meh', 'brilliant', 'ducky', 'coolio', 'incredible', 'wonderful',
-    'smashing', 'lovely',
+    "awesome",
+    "terrific",
+    "fantastic",
+    "neato",
+    "fantabulous",
+    "wowza",
+    "oh-so-not-meh",
+    "brilliant",
+    "ducky",
+    "coolio",
+    "incredible",
+    "wonderful",
+    "smashing",
+    "lovely",
 ]
 
 
-@app.route('/')
+@app.route("/")
 def start_here():
     """Display homepage."""
 
     return "Hi! This is the home page."
 
 
-@app.route('/hello')
+@app.route("/hello")
 def say_hello():
     """Say hello to user."""
 
     return render_template("hello.html")
 
 
-@app.route('/greet')
+@app.route("/greet")
 def greet_person():
     """Greet user with compliment."""
 
@@ -37,12 +48,39 @@ def greet_person():
 
     compliment = choice(AWESOMENESS)
 
-    return render_template("compliment.html",
-                           person=player,
-                           compliment=compliment)
+    return render_template("compliment.html", person=player, compliment=compliment)
 
 
-if __name__ == '__main__':
+@app.route("/game")
+def show_madlib_form():
+    """get the user's responce to yes or no question """
+
+    user = request.args.get("user")
+
+    # return render_template("game.html", user=user,)
+
+    if user == "yes":
+
+        return render_template("game.html", user=user)
+    if user == "No":
+        return render_template("goodbye.html", user=user)
+
+
+@app.route("/madlibs")
+def show_madlib():
+    """render madlib.html template with given info"""
+
+    person = request.args.get("person")
+    color = request.args.get("color")
+    noun = request.args.get("noun")
+    adjective = request.args.get("adjective")
+
+    return render_template(
+        "madlibs.html", person=person, color=color, noun=noun, adjective=adjective
+    )
+
+
+if __name__ == "__main__":
     # Setting debug=True gives us error messages in the browser and also
     # "reloads" our web app if we change the code.
 
